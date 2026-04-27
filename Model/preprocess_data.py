@@ -8,35 +8,44 @@ Contributor: Vanny Bundick
 """
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 """
 def load_and_preprocess: loads dataset and preprocesses it
 - converts dataset labels to binary (0 = normal, 1 = attack)
-- encodes categorical features into numeric values
-- normalizes feature values
-- splits data into training and testing sets
+- Loads separate training and testing datasets
 """
-def load_and_preprocess(path = "data/nsl_kdd_sample.csv"):
+def load_and_preprocess(train_path, test_path):
     # Loads and preprocesses NSL_KDD dataset
-    df = pd.read_csv(path)
+    train_df = pd.read_csv(train_path)
+    test_df = pd.read_csv(test_path)
 
     # Converts labels to binary -> 0 = normal, 1 = attack
-    df['label'] = df['label'].apply(lambda x: 0 if x == 'normal' else 1)
+    train_df['label'] = train_df['label'].apply(lambda x: 0 if x == 'normal' else 1)
+    test_df['label'] = test_df['label'].apply(lambda x: 0 if x == 'normal' else 1)
 
     # Encodes the categorical columns of data set
-    categorical_col = df.select_dtypes(include = ['object']).columns
+    categorical_col = train_df.select_dtypes(include = ['object']).columns
+    encoders = {}
+
     for col in categorical_col:
         le = LabelEncoder()
-        df[col] = le.fit_transform(df[col])
+        train_df[col] = le.fit_transform(train_df[col])
+        test_df[col] = le.transform(test_df[col])
+       
+        encoders[col] = le
 
-        X = df.drop('label', axis = 1)
-        Y = df['label']
+    # Split features and labels
+    X_train = train_df.drop('label', axis = 1)
+    y_train = train_df['label']
 
-        # Normalize features so values are on similar scale -> for performance
-        scaler = StandardScaler()
-        X_scaled = scaler.fit_transform(X)
+    X_test = test_df.drop('label', axis = 1)
+    y_test = test_df['label']
+     
 
-        # Split dataset into 80% training and 20% testing
-        return train_test_split(X_scaled, Y, test_size=0.2, random_state=42)
+    # Normalize train features so values are on similar scale -> for performance
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    return X_train, X_test, y_train. y_test

@@ -1,1 +1,2 @@
-# cs4371-IDS-and-Simulation
+# CS4371-IDS-and-Packet-Simulation
+

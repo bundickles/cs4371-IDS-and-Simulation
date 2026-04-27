@@ -17,7 +17,10 @@ from packet_sim import run_sim
 st.title("AI-Based IoT Intrusion Detection System")
 st.write("Hybrid IDS using SVM and Deep Learning")
 
-X_train, X_test, y_train, y_test = load_and_preprocess()
+X_train, X_test, y_train, y_test = load_and_preprocess(
+    "data/NSL_KDD_Train.csv",
+    "data/NSL_KDD_Test.csv"
+)
 
 # UI Button for model training.
 if st.button("Train Model"):
