@@ -11,7 +11,7 @@ import streamlit as st
 
 from preprocess_data import load_and_preprocess
 from model import train_model, evaluate_model
-#from packet_sim import run_sim
+from packet_sim import run_sim
 
 # UI Title and description of program.
 st.title("AI-Based IoT Intrusion Detection System")
@@ -45,4 +45,19 @@ if st.button("Train Model"):
     st.session_state["dl"] = dl_model
     st.session_state["X_test"] = X_test
 
-# packet sim section once file is done 
+# UI BUtton for packet simulation.
+if st.button("Run Real-Time Simulation"):
+    if "svm" not in st.session_state:
+        st.warning("Please use Train Model first!")        # Error handling if model not trained.
+    else:
+        st.write("Simulating real-time network traffic...\n")
+
+        outputs = run_sim(
+            st.session_state["svm"],
+            st.session_state["dl"],
+            st.session_state["X_test"]
+        )
+
+        # Displays each packet result
+        for line in outputs:
+            st.text(line)
