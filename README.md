@@ -30,4 +30,4 @@ Libararies:
 -pandas, numpy -> data processing
 -scikit-learn -> SVM, preprocessing, evaluation
 -Tensorfow/keras -> deep learning
-- Streamlit -> interactive UI
+-Streamlit -> interactive UI

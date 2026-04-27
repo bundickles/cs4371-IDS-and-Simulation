@@ -12,8 +12,8 @@ Contributor: Vanny Bundick
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from keras.models import Sequential
+from keras.layers import Dense
 
 """
 def train_model: trains both SVM and DNN models.

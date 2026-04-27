@@ -3,3 +3,4 @@ scikit_learn==1.8.0
 streamlit==1.56.0
 tensorflow==2.21.0
 numpy
+keras
