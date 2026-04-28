@@ -20,7 +20,7 @@ def main():
     # Main title UI
     print("=" * 50)
     print(" IoT Intrusion Detection System")
-    print(" Simple Vector Machine and Deep Neural Network ")
+    print(" Support Vector Machine and Deep Neural Network ")
     print("=" * 50)
 
     # Step 1: load dataset
