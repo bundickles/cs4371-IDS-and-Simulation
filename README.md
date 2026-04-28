@@ -52,3 +52,7 @@ Libararies:
 - scikit-learn -> SVM, preprocessing, evaluation
 - Tensorfow/keras -> deep learning
 - matplotlib -> bar graph for packet simulation
+
+### Reference:
+Awajan, A. (2023). A Novel Deep Learning-Based Intrusion Detection System for IoT Networks. Computers, 12(2), 34. https://doi.org/10.3390/computers12020034
+
