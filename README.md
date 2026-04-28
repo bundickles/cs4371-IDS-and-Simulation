@@ -29,6 +29,8 @@ CS4371-IDS-AND-SIMULATION/
 └── expected_results_example.txt # Example of results
 └── requirements.txt # Dependencies 
 
+└── IoT Intrusion Detection System - Evaluation.txt
+
 ### Dataset:
 Used the standard NSL_KDD training and testing dataset and converted to binary classification:
 -0 -> normal
@@ -41,3 +43,4 @@ Libararies:
 -pandas, numpy -> data processing
 -scikit-learn -> SVM, preprocessing, evaluation
 -Tensorfow/keras -> deep learning
+- matplotlib -> bar graph for packet simulation

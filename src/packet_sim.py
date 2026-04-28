@@ -9,7 +9,7 @@ Contributor: Vanny Bundick
 import numpy as np
 import time
 import random
-
+import matplotlib.pyplot as plt
 """
 def print_packet: output of the IoT traffic simulation.
 """
@@ -77,4 +77,18 @@ def run_sim(svm_model, dnn_model, scaler, feature_size, classify_packet):
 
         # Simulate network delay 
         time.sleep(0.2)
+
+    # Bar graph for packet classification
+    labels = ["Normal", "SVM Attacks", "DNN Confirmed"]
+    values = [normal, svm_attacks, dnn_attacks]
+
+    plt.figure(figsize = (6,4))
+    plt.bar(labels, values, color = ["green", "orange", "red"])
+    plt.title("Packet Classification Summary")
+    plt.ylabel("Packet Count")
+
+    for i, v in enumerate(values):
+        plt.text(i, v + 0.2, str(v), ha = 'center')
+
+    plt.show()
     

@@ -1,0 +1,41 @@
+IoT Intrusion Detection System - Evaluation Report
+===================================================
+
+1. Dataset
+- NSL-KDD dataset used
+- Binary classification: Normal vs Attack
+
+2. Model Overview
+- SVM used as first-stage anomaly detector
+- DNN used as second-stage classifier
+- Pipeline simulates real-time IDS filtering
+
+3. Results
+
+SVM:
+- Accuracy: ~76–77%
+- Strength: fast detection of obvious anomalies
+- Weakness: false negatives (missed attacks)
+
+DNN:
+- Accuracy: ~78–79%
+- Strength: better classification of complex patterns
+- Weakness: still misses some attacks
+
+Hybrid Pipeline:
+- Accuracy: ~72–75%
+- Tradeoff: improved efficiency but slightly lower recall
+
+4. Comparison to Research Paper
+- Paper reports higher accuracy due to:
+  - deeper feature engineering
+  - optimized hyperparameters
+  - full dataset training
+- Our implementation prioritizes:
+  - real-time simulation
+  - simplified architecture
+  - system demonstration over max accuracy
+
+5. Key Insight
+- Pipeline improves realism of IDS deployment
+- False negatives are more critical than false positives in security systems

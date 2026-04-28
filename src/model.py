@@ -62,4 +62,24 @@ def evaluate_model(name, y_true, y_pred):
     print(classification_report(y_true, y_pred))
 
     print("Confusion Matrix: ")
-    print (confusion_matrix(y_true, y_pred))
+    cm = confusion_matrix(y_true, y_pred)
+    print_confusion_matrix(cm)
+
+"""
+def print_confusion_matrix: prints detailed version of confusion matrix.
+"""
+def print_confusion_matrix(cm):
+    tn, fp, fn, tp = cm.ravel()
+
+    print("\nConfusion Matrix")
+    print("-" * 40)
+    print(f"True Negatives (Correct Normal): {tn}")
+    print(f"False Positives (False Alarm): {fp}")
+    print(f"False Negatives (Missed Attack): {fn}")
+    print(f"True Positives (Detected Attack): {tp}")
+    print("-" * 40)
+
+    total = tn + fp + fn + tp
+
+    print(f"\nDetection Rate: {tp / (tp + fn):.2f}")
+    print(f"False Alarm Rate: {fp / (fp + tn):.2f}")
