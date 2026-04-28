@@ -6,39 +6,75 @@ model from research paper.
 
 Contributor: Vanny Bundick
 """
-
+import numpy as np
 import time
+import random
+
+"""
+def print_packet: output of the IoT traffic simulation.
+"""
+def print_packet(i, svm_pred, dnn_pred):
+    if svm_pred == 0:
+        label = "NORMAL (SVM)"
+    else:
+        label = "ATTACK (SVM)"
+        if dnn_pred == 1:
+            label += " - CONFIRMED (DNN)"
+        else:
+            label += " - REJECTED (DNN)"
+        
+    print(f"[Packet {i}] {label}")
+
+"""
+def generate_packet: simulates IoT network traffic.
+- Mixed packet -> 80% normal, 20% anomalous
+- Mimics real-world network to test efficacy of paper's IDS design.
+"""
+def generate_packet(num_features):
+    # Normal traffic -> centered near 0
+    if random.random() < 0.8:
+        return np.random.normal(loc = 0.0, scale = 1.0, size = num_features)
+    
+    # Attack traffic -> deviates more
+    return np.random.normal(loc = 3.0, scale = 2.0, size = num_features)
 
 """
 def run_sim: Runs real-time packet simulation.
 - Each data sample or "packet" is passed through the anomoly detection
-  of SVM and classified by DNN. 
+  of SVM and classified by DNN in pipeline.
 - Delay parameter simulates real time packet arrival.
 """
-def run_sim(svm_model, dl_model, X_test, delay = 0.3):
-    results = []
+def run_sim(svm_model, dnn_model, scaler, feature_size, classify_packet):
+    print("\n--- Real-Time IoT Traffic Simulation ---\n")
+
+    # Counters
+    total = 0
+    normal = 0
+    svm_attacks = 0
+    dnn_attacks = 0
 
     # Simulate the first 20 packets
     for i in range(20):
-        # Select 1 "packet"
-        packet = X_test[i].reshape(1, -1)
-
-        # SVM Filtering: packet considered normal -> output normal at SVM level
-        svm_pred = svm_model.predict(packet)[0]
-        if svm_pred == 0:
-            result = f"Packet {i + 1}: NORMAL (SVM)"
-        else:                                           # If not normal @ SVM -> DNN filtering
-            dl_pred = dl_model.predict(packet)[0][0]
-
-            if dl_pred > 0.5:
-                result = f"Packet {i + 1}: ATTACK (DNN)"
-            else:
-                result = f"Packet {i + 1}: NORMAL (Filtered)"
+        # Generate packet
+        packet = generate_packet(feature_size)
         
-        results.append(result)
+        svm_pred, dnn_pred = classify_packet(packet, svm_model, dnn_model, scaler)
+        total += 1
 
-        # Delay to simulate real time incoming packets
-        time.sleep(delay)
-    
-    return results
+        if svm_pred == 0:
+            normal += 1
+        else:
+            svm_attacks += 1
+            if dnn_pred == 1:
+                dnn_attacks += 1
+
+
+        print_packet(i, svm_pred, dnn_pred)
+        print(
+            f"[STATS] Total: {total} | Normal: {normal} | "
+            f"SVM: {svm_attacks} | DNN: {dnn_attacks}"
+        )
+
+        # Simulate network delay 
+        time.sleep(0.2)
     

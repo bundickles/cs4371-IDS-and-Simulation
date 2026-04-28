@@ -9,37 +9,41 @@ f1 score, and confusion matrix.
 Contributor: Vanny Bundick
 """
 
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-
+from sklearn.svm import LinearSVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Input
 
 """
-def train_model: trains both SVM and DNN models.
+def train_svm: trains SVM model.
 - SVM classifies traffic as normal or potential attack.
+"""
+def train_svm(X_train, y_train):
+    # Support Vector Machine
+    svm_model = LinearSVC(max_iter = 3000)              # Optimize so SVM runs faster
+    svm_model.fit(X_train, y_train)
+
+    return svm_model
+
+"""
+def train_dnn: trains DNN model.
 - DNN is inspired by research paper architecture for final classification
   and is a fully connected feedforward neural network (FCFFN).
 """
-def train_model(X_train, y_train):
-    # Support Vector Machine
-    svm_model = SVC(probability = True)
-    svm_model.fit(X_train, y_train)
-
+def train_dnn(X_train, y_train):
     # Deep Neural Network
-    model = Sequential()
-    model.add(Dense(16, input_dim = X_train.shape[1], activation = 'relu'))     # Input layer, 1st hidden layer
-    model.add(Dense(12, activation = 'relu'))                                   # Hidden Layers
-    model.add(Dense(8, activation = 'relu'))
-    model.add(Dense(4, activation = 'relu'))
-    model.add(Dense(1, activation = 'sigmoid'))                                 # Output layer -> outputs probability
+    dnn_model = Sequential()
+    dnn_model.add(Input(shape = (X_train.shape[1],)))
+    dnn_model.add(Dense(32, activation = 'relu'))     # Input layer, 1st hidden layer
+    dnn_model.add(Dense(16, activation = 'relu'))                                        # Hidden Layer
+    dnn_model.add(Dense(1, activation = 'sigmoid'))                                      # Output layer -> outputs probability
 
     # Compile model: binary classification -> binary crossentropy, optimizer -> adam (efficient gradient decent)
-    model.compile(loss = 'binary_cossentropy', optimizer = 'adam', metrics = ['accuracy'])
+    dnn_model.compile(loss = 'binary_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
     # Train DNN
-    model.fit(X_train, y_train, epochs = 10, batch_size = 32, verbose = 0)
+    dnn_model.fit(X_train, y_train, epochs = 5, batch_size = 64, verbose = 0)   # Optimized for demo
 
-    return svm_model, model
+    return dnn_model
 
 """
 def evaluate_model: evaluated trained deep learning model with common metrics.
@@ -49,17 +53,13 @@ def evaluate_model: evaluated trained deep learning model with common metrics.
 - F1 Score
 - Confusion Matrix
 """
-def evaluate_model(model, X_test, y_test):
-    # Predict probabilities, convert to binary
-    y_pred = (model.predict(X_test) > 0.5).astype("int32")
+def evaluate_model(name, y_true, y_pred):
+    #Print evaluation metrics
+    print(f"\n--- {name} Evaluation ---")
+    print("Accuracy: ", accuracy_score(y_true, y_pred))
 
-    # Store evaluation results
-    results = {
-        "accuracy": accuracy_score(y_test, y_pred),
-        "precision": precision_score(y_test, y_pred),
-        "recall": recall_score(y_test, y_pred),
-        "f1": f1_score(y_test, y_pred),
-        "confusion_matrix": confusion_matrix(y_test, y_pred)
-    }
+    print("\nClassification Report: ")
+    print(classification_report(y_true, y_pred))
 
-    return results
+    print("Confusion Matrix: ")
+    print (confusion_matrix(y_true, y_pred))
