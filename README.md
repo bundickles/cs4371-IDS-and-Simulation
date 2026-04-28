@@ -11,7 +11,7 @@ This project implements a hybrid IDS for IoT networks using machine learning and
 1. Clone repository: git clone https://github.com/bundickles/cs4371-IDS-and-Simulation.git -> cd cs4371-IDS-and-Simulation
 2. Create virtual enviornment: python -m venv venv -> Windows: venv\Scripts\activate or Linux/Mac: source venv/bin/activate
 3. Install dependencies: pip install -r requirements.txt
-4. Run application: python -m src.main.py
+4. Run application: python -m src.main
 
 
 ### Project Structure:
